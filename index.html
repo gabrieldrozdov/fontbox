@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Fontbox</title>
+	<link rel="stylesheet" href="style.css">
+
+	<!-- Tone.js for audio -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+</head>
+<body>
+	<div class="container" data-intro="1">
+		<main class="stage">
+			<h1 class="title">Fontbox</h1>
+			<div class="content"></div>
+		</main>
+		<nav class="controls">
+			<div class="controls-text">
+				<h2 class="controls-text-title">Input</h2>
+				<input type="text" class="controls-text-input" spellcheck="false" placeholder="Type here!">
+			</div>
+			<div class="controls-sequencer">
+				<h2 class="controls-sequencer-title">Sequencer</h2>
+				<div class="controls-labels">
+					<div class="controls-labels-letter">Letter</div>
+					<div class="controls-labels-btn"><span>Font</span></div>
+					<div class="controls-labels-divider"></div>
+					<div class="controls-labels-btn"><span>Motion</span></div>
+					<div class="controls-labels-btn"><span>Pulse</span></div>
+					<div class="controls-labels-divider"></div>
+					<div class="controls-labels-btn"><span>Sound</span></div>
+					<div class="controls-labels-divider"></div>
+					<div class="controls-labels-btn"><span>Note</span></div>
+					<div class="controls-labels-btn"><span>Octave</span></div>
+					<div class="controls-labels-divider"></div>
+					<div class="controls-labels-tempo">Time (ms)</div>
+				</div>
+				<div class="controls-letter controls-setall">
+					<div class="controls-letter-label">Set All</div>
+					<div class="controls-letter-btn" data-input="font">A</div>
+					<div class="controls-letter-divider"></div>
+					<div class="controls-letter-btn" data-input="motion">1</div>
+					<div class="controls-letter-btn" data-input="pulse">1</div>
+					<div class="controls-letter-divider"></div>
+					<div class="controls-letter-btn" data-input="sound">1</div>
+					<div class="controls-letter-divider"></div>
+					<div class="controls-letter-btn" data-input="note">C</div>
+					<div class="controls-letter-btn" data-input="octave">3</div>
+					<div class="controls-letter-divider"></div>
+					<input type="number" min="10" max="1000" value="250" data-input="time" class="controls-letter-number"/>
+				</div>
+				<div class="controls-letter controls-rando">
+					<div class="controls-letter-label">Go Rando</div>
+					<div class="controls-rando-btn" data-input="font"><div></div></div>
+					<div class="controls-letter-divider"></div>
+					<div class="controls-rando-btn" data-input="motion"><div></div></div>
+					<div class="controls-rando-btn" data-input="pulse"><div></div></div>
+					<div class="controls-letter-divider"></div>
+					<div class="controls-rando-btn" data-input="sound"><div></div></div>
+					<div class="controls-letter-divider"></div>
+					<div class="controls-rando-btn" data-input="note"><div></div></div>
+					<div class="controls-rando-btn" data-input="octave"><div></div></div>
+					<div class="controls-letter-divider"></div>
+					<div class="controls-rando-btn controls-rando-btn-large" data-input="time"><div></div></div>
+				</div>
+				<div class="controls-letters">
+				</div>
+			</div>
+			<div class="controls-playback">
+				<h2 class="controls-playback-title">Playback</h2>
+				<div class="controls-playback-btns">
+					<div class="controls-transport">
+						<h3 class="controls-playback-label">Sequencer Direction</h3>
+						<div class="controls-transport-toggles">
+							<div class="controls-transport-toggle" onclick="changeDirection('backward')" data-transport="backward">
+								<svg viewBox="0 0 200 100"><polygon points="100 0 100 100 0 50 100 0"/><polygon points="200 0 200 100 100 50 200 0"/></svg>
+							</div>
+							<div class="controls-transport-toggle" data-transport="random" onclick="changeDirection('random')">
+								<svg viewBox="0 0 200 100"><polygon points="90 0 90 100 0 50 90 0"/><polygon points="110 0 110 100 200 50 110 0"/></svg>
+							</div>
+							<div class="controls-transport-toggle" data-transport="forward" onclick="changeDirection('forward')" data-active="1">
+								<svg viewBox="0 0 200 100"><polygon points="0 0 0 100 100 50 0 0"/><polygon points="100 0 100 100 200 50 100 0"/></svg>
+							</div>
+						</div>
+					</div>
+					<div class="controls-playback-divider"></div>
+					<div class="controls-playback-toggles">
+						<h3 class="controls-playback-label">Toggle Playback</h3>
+						<div class="controls-playback-toggle" onclick="togglePlayback()" data-state="0">
+							<svg viewBox="0 0 100 100" class="controls-playback-toggle-play"><polygon points="0 0 0 100 100 50 0 0"/></svg>
+							<svg viewBox="0 0 100 100" class="controls-playback-toggle-pause"><rect width="33.333" height="100"/><rect x="66.667" width="33.333" height="100"/></svg>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="controls-settings">
+				<h2 class="controls-settings-title">Settings</h2>
+				<div class="controls-settings-content">
+					<div class="controls-settings-section">
+						<h3 class="controls-settings-label">Spacing</h3>
+						<div class="controls-settings-section-btns">
+							<div class="controls-settings-btn" onclick="changeSpacing(-.02)">
+								<svg viewBox="0 0 100 100"><rect x="33.333" width="33.333" height="100" transform="translate(100) rotate(90)"/></svg>
+							</div>
+							<div class="controls-settings-btn" onclick="changeSpacing(.02)">
+								<svg viewBox="0 0 100 100"><polygon points="100 33.333 66.667 33.333 66.667 0 33.333 0 33.333 33.333 0 33.333 0 66.667 33.333 66.667 33.333 100 66.667 100 66.667 66.667 100 66.667 100 33.333"/></svg>
+							</div>
+						</div>
+					</div>
+					<div class="controls-settings-divider"></div>
+					<div class="controls-settings-section">
+						<h3 class="controls-settings-label">Volume</h3>
+						<div class="controls-settings-section-btns">
+							<div class="controls-settings-btn">
+								<svg viewBox="0 0 100 100"><rect x="33.333" width="33.333" height="100" transform="translate(100) rotate(90)"/></svg>
+							</div>
+							<div class="controls-settings-btn">
+								<svg viewBox="0 0 100 100"><polygon points="100 33.333 66.667 33.333 66.667 0 33.333 0 33.333 33.333 0 33.333 0 66.667 33.333 66.667 33.333 100 66.667 100 66.667 66.667 100 66.667 100 33.333"/></svg>
+							</div>
+						</div>
+					</div>
+					<div class="controls-settings-divider"></div>
+					<div class="controls-settings-section">
+						<h3 class="controls-settings-label">Animations</h3>
+						<div class="controls-settings-section-btns">
+							<div class="controls-settings-btn controls-settings-animations" onclick="toggleAnimations();">
+								<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+							</div>
+						</div>
+					</div>
+					<div class="controls-settings-divider"></div>
+					<div class="controls-settings-section">
+						<h3 class="controls-settings-label">Hide Menu</h3>
+						<div class="controls-settings-section-btns">
+							<div class="controls-settings-btn">
+								<svg viewBox="0 0 100 100"><polygon points="100 23.57 76.43 0 50 26.43 23.57 0 0 23.57 26.43 50 0 76.43 23.57 100 50 73.57 76.43 100 100 76.43 73.57 50 100 23.57"/></svg>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</nav>
+	</div>
+	<div class="background"></div>
+
+	<script src="script.js"></script>
+</body>
+</html>
