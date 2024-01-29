@@ -1,6 +1,7 @@
 // —————————————————————————————
 // SAMPLERS
 // —————————————————————————————
+let settingsVolume = -10;
 
 // Piano sampler
 const pianoSampler = new Tone.Sampler({
@@ -19,7 +20,7 @@ const pianoSampler = new Tone.Sampler({
 		release: .5
 	},
 	baseUrl: "assets/audio/piano/",
-	volume: -10,
+	volume: settingsVolume,
 }).toDestination();
 function playPiano(sample) {
 	pianoSampler.triggerAttackRelease(sample, .5, "+0", `+${Math.random()*.5+.5}`);
@@ -88,7 +89,7 @@ const percussionSampler = new Tone.Sampler({
 		D8: "woodblock-higher.mp3"
 	},
 	baseUrl: "assets/audio/percussion/",
-	volume: -10,
+	volume: settingsVolume,
 }).toDestination();
 let percussionNotes = ["C0","D0","E0","F0","G0","A0","B0","C1","D1","E1","F1","G1","A1","B1","C2","D2","E2","F2","G2","A2","B2","C3","D3","E3","F3","G3","A3","B3","C4","D4","E4","F4","G4","A4","B4","C5","D5","E5","F5","G5","A5","B5","C6","D6","E6","F6","G6","A6","B6","C7","D7","E7","F7","G7","A7","B7","C8","D8"]
 function playPercussion(sample) {
@@ -105,7 +106,7 @@ const tomSampler = new Tone.Sampler({
 		C3: "tom2.mp3",
 	},
 	baseUrl: "assets/audio/percussion/",
-	volume: -10,
+	volume: settingsVolume,
 }).toDestination();
 function playTom(freq) {
 	if (freq == "random") {
@@ -121,7 +122,7 @@ const blockSampler = new Tone.Sampler({
 		C4: "woodblock-higher.mp3",
 	},
 	baseUrl: "assets/audio/percussion/",
-	volume: -10,
+	volume: settingsVolume,
 }).toDestination();
 function playBlock(freq) {
 	blockSampler.triggerAttackRelease(freq, 1);
@@ -136,7 +137,7 @@ for (let letter of voiceSamplerLetters) {
 			C3: `${letter}.mp3`
 		},
 		baseUrl: "assets/audio/voice/",
-		volume: -10,
+		volume: settingsVolume,
 	}).toDestination();
 }
 function playVoice(phrase, pitch, speed) {
@@ -190,6 +191,8 @@ function randomizeDefaults() {
 			const controlsSetallTime = controlsSetall.querySelector(`[data-input="time"]`);
 			controlsSetallTime.value = settingsDefaults[i];
 			controlsSetallTime.addEventListener("input", defaultsTime);
+			controlsSetallTime.addEventListener("mouseenter", () => {highlightSetting("time")});
+			controlsSetallTime.addEventListener("mouseleave", () => {unhighlightSetting("time")});
 			continue
 		}
 		const settingValue = Math.floor(Math.random()*settingsValues[i].length);
@@ -207,9 +210,25 @@ function randomizeDefaults() {
 			}
 		}
 		controlsSetallToggle.addEventListener("click", () => {defaultsToggle(settingName)});
+		controlsSetallToggle.addEventListener("mouseenter", () => {highlightSetting(settingName)});
+		controlsSetallToggle.addEventListener("mouseleave", () => {unhighlightSetting(settingName)});
 	}
 }
 randomizeDefaults();
+
+// Highlight/unhighlight setting for setall toggles
+function highlightSetting(settingName) {
+	let toggles = document.querySelectorAll(`[data-input="${settingName}"]`);
+	for (let toggle of toggles) {
+		toggle.dataset.highlight = 1;
+	}
+}
+function unhighlightSetting(settingName) {
+	let toggles = document.querySelectorAll(`[data-input="${settingName}"]`);
+	for (let toggle of toggles) {
+		toggle.dataset.highlight = 0;
+	}
+}
 
 function defaultsToggle(settingName) {
 	const settingIndex = settingsNames.indexOf(settingName);
@@ -288,6 +307,59 @@ function controlsToggle(letterIndex, settingName) {
 	}
 }
 
+// Randomize settings
+function controlsRando(letterIndex) {
+	settingsLetters[letterIndex] = [
+		Math.floor(Math.random()*settingsValues[0].length),
+		Math.floor(Math.random()*settingsValues[1].length),
+		Math.floor(Math.random()*settingsValues[2].length),
+		Math.floor(Math.random()*settingsValues[3].length),
+		Math.floor(Math.random()*settingsValues[4].length),
+		Math.floor(Math.random()*settingsValues[5].length),
+		Math.round(Math.random()*990+10),
+	];
+	controlsFixValues(letterIndex);
+}
+
+// Randomize ALL settings
+function goRando() {
+	settingsDefaults = [
+		Math.floor(Math.random()*settingsValues[0].length),
+		Math.floor(Math.random()*settingsValues[1].length),
+		Math.floor(Math.random()*settingsValues[2].length),
+		Math.floor(Math.random()*settingsValues[3].length),
+		Math.floor(Math.random()*settingsValues[4].length),
+		Math.floor(Math.random()*settingsValues[5].length),
+		Math.round(Math.random()*990+10),
+	];
+
+	// Fix values
+	const elmnt = document.querySelector(".controls-setall");
+	for (let i=0; i<settingsDefaults.length; i++) {
+		const settingName = settingsNames[i];
+
+		// Display correct value in toggle
+		const toggle = elmnt.querySelector(`[data-input="${settingName}"]`);
+		if (settingName == "note") {
+			toggle.innerText = settingsValues[i][settingsDefaults[i]];
+		} else if (settingName == "time") {
+			toggle.value = settingsDefaults[i];
+		} else {
+			if (settingsValues[i][settingsDefaults[i]] == "?") {
+				toggle.innerText = "?";
+			} else {
+				toggle.innerText = settingsDefaults[i]+1;
+			}
+		}
+		
+		// Apply to all letters
+		for (let i=0; i<settingsLetters.length; i++) {
+			setToDefaults(i, settingName);
+		}
+	}
+}
+
+// Handle time entry
 function controlsTime(letterIndex) {
 	let elmnt = controlsLetters.querySelectorAll(".controls-letter")[letterIndex];
 	let elmntInput = elmnt.querySelector('.controls-letter-number');
@@ -300,6 +372,29 @@ function controlsTime(letterIndex) {
 	}
 }
 
+// Display correct values
+function controlsFixValues(letterIndex) {
+	const elmnt = controlsLetters.querySelectorAll(".controls-letter")[letterIndex];
+	for (let i=0; i<settingsLetters[letterIndex].length; i++) {
+		const settingName = settingsNames[i];
+
+		// Display correct value in toggle
+		const toggle = elmnt.querySelector(`[data-input="${settingName}"]`);
+		if (settingName == "note") {
+			toggle.innerText = settingsValues[i][settingsLetters[letterIndex][i]];
+		} else if (settingName == "time") {
+			toggle.value = settingsLetters[letterIndex][i];
+		} else {
+			if (settingsValues[i][settingsLetters[letterIndex][i]] == "?") {
+				toggle.innerText = "?";
+			} else {
+				toggle.innerText = settingsLetters[letterIndex][i]+1;
+			}
+		}
+	}
+}
+
+// Return to defaults
 function setToDefaults(letterIndex, settingName) {
 	// Target correct setting
 	const elmnt = controlsLetters.querySelectorAll(".controls-letter")[letterIndex];
@@ -358,21 +453,20 @@ function generateText() {
 		} else {
 			letterElmnt.dataset.index = letterIndex;
 
+			// Default settings
+			settingsLetters.push(settingsDefaults.slice(0));
+
 			// Random settings
-			settingsLetters.push([
-				Math.floor(Math.random()*settingsValues[0].length),
-				Math.floor(Math.random()*settingsValues[1].length),
-				Math.floor(Math.random()*settingsValues[2].length),
-				Math.floor(Math.random()*settingsValues[3].length),
-				Math.floor(Math.random()*settingsValues[4].length),
-				Math.floor(Math.random()*settingsValues[5].length),
-				Math.round(Math.random()*990+10),
-			]);
 
 			let controlsLetter = document.createElement('div');
 			controlsLetter.classList.add('controls-letter');
 			controlsLetter.innerHTML += `
 				<div class="controls-letter-label">${letter}</div>
+				<div class="controls-letter-spacer"></div>
+				<div class="controls-letter-rando">
+					<svg viewBox="0 0 100 100"><path d="M75,70h-10c-8.258,0-13.227-7.839-19.401-20,6.174-12.162,11.143-20,19.401-20h10v15l25-20-25-20v15h-10c-12.18,0-19.345,9.002-25,19.146-5.655-10.144-12.82-19.146-25-19.146H0v10h15c8.258,0,13.228,7.838,19.401,20-6.174,12.161-11.143,20-19.401,20H0v10h15c12.18,0,19.345-9.002,25-19.146,5.655,10.144,12.82,19.146,25,19.146h10v15l25-20-25-20v15Z"/></svg>
+				</div>
+				<div class="controls-letter-divider"></div>
 				<div class="controls-letter-btn" data-input="font">${settingsLetters[letterIndex][0]+1}</div>
 				<div class="controls-letter-divider"></div>
 				<div class="controls-letter-btn" data-input="motion">${settingsLetters[letterIndex][1]+1}</div>
@@ -384,10 +478,13 @@ function generateText() {
 				<div class="controls-letter-btn" data-input="octave">${settingsLetters[letterIndex][5]+1}</div>
 				<div class="controls-letter-divider"></div>
 				<input type="number" min="10" max="1000" value="${settingsLetters[letterIndex][6]}" data-input="time" class="controls-letter-number"/>
+				<div class="controls-letter-trigger"></div>
 			`;
 			controlsLetters.appendChild(controlsLetter);
 
 			const trackedIndex = letterIndex;
+			controlsFixValues(trackedIndex);
+			controlsLetter.querySelector('.controls-letter-rando').addEventListener("click", () => {controlsRando(trackedIndex)});
 			controlsLetter.querySelector('[data-input="font"]').addEventListener("click", () => {controlsToggle(trackedIndex, "font")});
 			controlsLetter.querySelector('[data-input="motion"]').addEventListener("click", () => {controlsToggle(trackedIndex, "motion")});
 			controlsLetter.querySelector('[data-input="pulse"]').addEventListener("click", () => {controlsToggle(trackedIndex, "pulse")});
@@ -395,6 +492,8 @@ function generateText() {
 			controlsLetter.querySelector('[data-input="note"]').addEventListener("click", () => {controlsToggle(trackedIndex, "note")});
 			controlsLetter.querySelector('[data-input="octave"]').addEventListener("click", () => {controlsToggle(trackedIndex, "octave")});
 			controlsLetter.querySelector('[data-input="time"]').addEventListener("input", () => {controlsTime(trackedIndex)});
+			controlsLetter.querySelector('.controls-letter-trigger').addEventListener("click", () => {triggerLetter(trackedIndex)});
+			letterElmnt.addEventListener("click", () => {triggerLetter(trackedIndex)});
 			letterIndex++;
 		}
 		content.appendChild(letterElmnt);
@@ -410,10 +509,12 @@ controlsText.addEventListener("input", () => {
 	controlsLetters.innerHTML = "";
 	settingsLetters = [];
 	word = controlsText.value;
-	if (word.length > 0) {
+	if (word.replace(/\s/g, '').length > 0) {
 		container.dataset.intro = 0;
 		generateText();
-		mainLoop();
+		if (!paused) {
+			mainLoop();
+		}
 	} else {
 		container.dataset.intro = 1;
 	}
@@ -425,7 +526,6 @@ let targetedLetter = 0;
 function mainLoop() {
 	// Target letter
 	const letterElmnt = content.querySelectorAll('.letter')[targetedLetter];
-	const letterEffect = letterElmnt.querySelector('.letter-effect');
 
 	// Skip if indicated
 	if (parseInt(letterElmnt.dataset.skip) == 1) {
@@ -434,6 +534,15 @@ function mainLoop() {
 	}
 
 	const letterIndex = letterElmnt.dataset.index;
+	triggerLetter(letterIndex);
+
+	loop = setTimeout(selectNextLetter, settingsLetters[letterIndex][6]);
+}
+
+// Trigger letter by index
+function triggerLetter(letterIndex) {
+	const letterElmnt = content.querySelector(`.letter[data-index="${letterIndex}"`);
+	const letterEffect = letterElmnt.querySelector('.letter-effect');
 
 	// Highlight letter in controls panel
 	const controlsLetter = controlsLetters.querySelectorAll('.controls-letter')[letterIndex];
@@ -475,7 +584,7 @@ function mainLoop() {
 		letterEffect.style.transition = `all ${settingsLetters[letterIndex][6]}ms cubic-bezier(0.25, 1, 0.5, 1), font-family 0s, font-weight 0s`;
 	} else {
 		letterElmnt.style.transition = 'unset';
-		letterEffect.style.transition = 'unset'
+		letterEffect.style.transition = 'unset';
 	}
 
 	// Font
@@ -508,13 +617,13 @@ function mainLoop() {
 	if (motion == "party") {
 		letterElmnt.style.transform = `scale(${Math.random()*1+.5}) translateY(${Math.random()*50-25}%) rotate(${Math.random()*40-20}deg)`;
 	} else if (motion == "width") {
-		letterElmnt.style.transform = `scaleX(${Math.random()*2+.2})`;
+		letterElmnt.style.transform = `scaleX(${Math.random()*1.5+.1})`;
 	} else if (motion == "rotate") {
-		letterElmnt.style.transform = `rotate(${Math.random()*1000-500}deg)`;
+		letterElmnt.style.transform = `rotate(${Math.random()*90-45}deg)`;
 	} else if (motion == "position") {
-		letterElmnt.style.transform = `translateY(${Math.random()*200-100}%)`;
+		letterElmnt.style.transform = `translateY(${Math.random()*100-50}%)`;
 	} else if (motion == "scale") {
-		letterElmnt.style.transform = `scale(${Math.random()*3+.1})`;
+		letterElmnt.style.transform = `scaleY(${Math.random()*3+.1})`;
 	}
 
 	// Pulse mode
@@ -529,7 +638,7 @@ function mainLoop() {
 		letterEffect.style.backgroundColor = titleColors[Math.floor(Math.random()*titleColors.length)];
 		letterEffect.style.transition = "0s";
 		setTimeout(() => {
-			letterEffect.style.transition = ".2s cubic-bezier(0.16, 1, 0.3, 1)";
+			letterEffect.style.transition = `all ${settingsLetters[letterIndex][6]}ms cubic-bezier(0.25, 1, 0.5, 1), font-family 0s, font-weight 0s`;
 			letterEffect.style.width = "0";
 			letterEffect.style.height = "0";
 		}, 100)
@@ -538,8 +647,6 @@ function mainLoop() {
 	}
 
 	body.style.backgroundColor = titleColors[Math.floor(Math.random()*titleColors.length)];
-
-	loop = setTimeout(selectNextLetter, settingsLetters[letterIndex][6]);
 }
 
 // Move to next letter
@@ -636,15 +743,20 @@ function toggleAnimations() {
 	}
 }
 
-// TODO: fix edge case where space is first letter
+// Hide/show controls
+function showControls() {
+	container.dataset.controls = 1;
+}
+function hideControls() {
+	container.dataset.controls = 0;
+}
+
 // TODO: fix voice generation if letter typed outside of allowed characters
 	// need a new recording for this
-// TODO: make setall only apply to the effect that's changed
-	// also, add hover effect to indicate that it'll apply to everything
-// hide/show menu
 // fix percussion instrument bank
-// fix labels for random generated initial settings
 
-// how to handle font widths?
+// fade out spacing and volume at edge cases
+// make volume actually work
 
-// manual playback option?
+// put in real content for sequencer!
+// custom icons? at least fonts for font field

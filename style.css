@@ -48,7 +48,7 @@ body {
 	width: 100vw;
 	height: 100vh;
 	z-index: -1;
-	background-color: #888;
+	background-color: var(--gray);
 	mix-blend-mode: multiply;
 	opacity: .5;
 }
@@ -61,6 +61,41 @@ body {
 	display: grid;
 	overflow: scroll;
 	grid-template-columns: 1fr minmax(450px, 450px);
+}
+.container[data-controls="0"] {
+	display: grid !important;
+	grid-template-columns: 1fr !important;
+	grid-template-rows: 1fr !important;
+}
+.message {
+	background-color: rgba(0,0,0,.8);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100dvh;
+	z-index: 9;
+	color: white;
+	font-size: 24px;
+	padding: 10px;
+	font-family: "Apfel", "Comic Sans MS", "Comic Sans", cursive;
+	animation: 1s 2s message forwards;
+	cursor: none;
+	text-align: center;
+}
+.container[data-controls="1"] .message {
+	display: none;
+}
+@keyframes message {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
 }
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button {  
@@ -78,6 +113,8 @@ input[type=number]::-webkit-outer-spin-button {
 	box-shadow: 5px 5px 0 black;
 	margin: 20px;
 	overflow: hidden;
+	padding: 10px;
+	background-color: var(--green);
 }
 .title {
 	font-family: "Apfel Brukt", "Comic Sans MS", "Comic Sans", cursive;
@@ -96,6 +133,17 @@ input[type=number]::-webkit-outer-spin-button {
 }
 .container[data-intro="0"] .title {
 	display: none;
+}
+.stage-border {
+	border: 2px solid black;
+	box-shadow: 2px 2px 0 black;
+	width: 100%;
+	height: 100%;
+	background-color: white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
 }
 .content {
 	font-family: "Apfel Brukt", "Comic Sans MS", "Comic Sans", cursive;
@@ -117,6 +165,8 @@ input[type=number]::-webkit-outer-spin-button {
 	align-items: center;
 	justify-content: center;
 	margin: var(--letterspacing);
+	cursor: pointer;
+	user-select: none;
 }
 .letter-effect {
 	background-color: yellow;
@@ -156,6 +206,9 @@ input[type=number]::-webkit-outer-spin-button {
 	padding-left: 0;
 	max-height: 100vh;
 	overflow-y: scroll;
+}
+.container[data-controls="0"] .controls {
+	display: none;
 }
 
 /* Text input */
@@ -249,7 +302,7 @@ input[type=number]::-webkit-outer-spin-button {
 	align-items: end;
 	text-transform: uppercase;
 	line-height: 1.2em;
-	gap: 2px;
+	gap: 4px;
 	letter-spacing: .05em;
 	font-weight: bold;
 	padding: 30px 10px 0 10px;
@@ -262,8 +315,9 @@ input[type=number]::-webkit-outer-spin-button {
 	flex-grow: 1;
 }
 .controls-labels-btn {
+	flex-shrink: 0;
 	transform: translateX(10px);
-	width: 30px;
+	width: 24px;
 }
 .controls-labels-btn span {
 	display: block;
@@ -271,13 +325,14 @@ input[type=number]::-webkit-outer-spin-button {
 	transform-origin: bottom left;
 }
 .controls-labels-tempo {
+	flex-shrink: 0;
 	width: 60px;
 	text-align: right;
 }
 .controls-labels-divider {
 	border-right: 1px solid rgba(0,0,0,.5);
 	height: 15px;
-	margin: 2px;
+	margin: 0 2px 4px 4px;
 }
 
 /* Sequencer letters */
@@ -287,26 +342,27 @@ input[type=number]::-webkit-outer-spin-button {
 	gap: 4px;
 	border-bottom: 1px solid black;
 	padding: 10px;
+	position: relative;
 }
 .controls-letter[data-flash="1"] {
 	background-color: white;
+}
+.controls-letter-spacer {
+	flex-grow: 1;
 }
 .controls-setall {
 	background-color: black;
 	color: white;
 	border-bottom: 2px solid black;
 }
-.controls-rando {
-	background-color: var(--gray);
-	color: white;
-	border-bottom: 2px solid black;
-}
 .controls-letter-label {
 	font-size: 24px;
-	flex-grow: 1;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	font-weight: 500;
+	z-index: 1;
+	position: relative;
 }
 .controls-letter-btn {
 	flex-shrink: 0;
@@ -325,6 +381,8 @@ input[type=number]::-webkit-outer-spin-button {
 	font-weight: bold;
 	box-shadow: 2px 2px 0 black;
 	background-color: white;
+	z-index: 1;
+	position: relative;
 }
 .controls-letter-btn:hover {
 	transform: translate(-2px, -2px);
@@ -334,10 +392,22 @@ input[type=number]::-webkit-outer-spin-button {
 	transform: translate(2px, 2px);
 	box-shadow: unset;
 }
+.controls-letter-btn[data-highlight="1"] {
+	animation: letter-highlight .2s ease-in-out infinite alternate;
+}
+@keyframes letter-highlight {
+	0% {
+		transform: scale(1);
+	}
+	100% {
+		transform: scale(.8);
+	}
+}
 .controls-setall .controls-letter-btn {
 	border: 2px solid white;
 	background-color: black;
 	box-shadow: 2px 2px 0 white;
+	animation: unset;
 }
 .controls-setall .controls-letter-btn:hover {
 	transform: translate(-2px, -2px);
@@ -346,37 +416,6 @@ input[type=number]::-webkit-outer-spin-button {
 .controls-setall .controls-letter-btn:active {
 	transform: translate(2px, 2px);
 	box-shadow: unset;
-}
-.controls-rando-btn {
-	user-select: none;
-	border: 2px solid black;
-	height: 24px;
-	width: 24px;
-	cursor: pointer;
-	text-align: center;
-	display: flex;
-	align-items: center;
-	background-color: white;
-	justify-content: center;
-	flex-shrink: 0;
-	box-shadow: 2px 2px 0 black;
-}
-.controls-rando-btn div, .controls-rando-btn-large div {
-	background-color: black;
-	height: 8px;
-	width: 8px;
-	border-radius: 50%;
-}
-.controls-rando-btn:hover {
-	transform: translate(-2px, -2px);
-	box-shadow: 4px 4px 0 black;
-}
-.controls-rando-btn:active {
-	transform: translate(2px, 2px);
-	box-shadow: unset;
-}
-.controls-rando-btn-large {
-	width: 60px;
 }
 .controls-letter-number {
 	border: 2px solid black;
@@ -391,6 +430,11 @@ input[type=number]::-webkit-outer-spin-button {
 	flex-shrink: 0;
 	background-color: white;
 	box-shadow: 2px 2px 0 black;
+	z-index: 1;
+	position: relative;
+}
+.controls-letter-number[data-highlight="1"] {
+	animation: letter-highlight .2s ease-in-out infinite alternate;
 }
 .controls-letter-number:hover {
 	background-color: white;
@@ -404,14 +448,69 @@ input[type=number]::-webkit-outer-spin-button {
 	color: white;
 	background-color: black;
 	box-shadow: 2px 2px 0 white;
+	animation: unset;
 }
 .controls-letter-divider {
 	border-right: 1px solid black;
 	height: 30px;
 	margin: 0 2px 0 4px;
+	position: relative;
+	z-index: 1;
 }
 .controls-setall .controls-letter-divider {
 	border-right: 1px solid white;
+}
+.controls-letter-trigger {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	cursor: pointer;
+}
+.controls-letter-trigger:hover {
+	background-color: white;
+}
+.controls-letter-trigger:active {
+	opacity: .5;
+}
+.controls-letter-rando {
+	width: 24px;
+	height: 24px;
+	background-color: white;
+	border: 2px solid black;
+	box-shadow: 2px 2px 0 black;
+	fill: black;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	z-index: 1;
+	cursor: pointer;
+}
+.controls-letter-rando:hover {
+	transform: translate(-2px, -2px);
+	box-shadow: 4px 4px 0 black;
+}
+.controls-letter-rando:active {
+	transform: translate(2px, 2px);
+	box-shadow: unset;
+}
+.controls-letter-rando svg {
+	width: 15px;
+	height: 15px;
+}
+.controls-setall .controls-letter-rando {
+	background-color: black;
+	border: 2px solid white;
+	box-shadow: 2px 2px 0 white;
+	fill: white;
+}
+.controls-setall .controls-letter-rando:hover {
+	box-shadow: 4px 4px 0 white;
+}
+.controls-setall .controls-letter-rando:active {
+	box-shadow: unset;
 }
 
 /* Playback */
@@ -436,14 +535,12 @@ input[type=number]::-webkit-outer-spin-button {
 	font-size: 10px;
 }
 .controls-playback-label {
-	margin-bottom: 4px;
+	margin-bottom: 2px;
 	text-transform: uppercase;
 	line-height: 1.2em;
 	letter-spacing: .1em;
-	text-align: center;
 	font-weight: bold;
 	font-size: 10px;
-	border-bottom: 1px solid black;
 }
 .controls-playback-btns {
 	display: grid;
@@ -555,14 +652,12 @@ input[type=number]::-webkit-outer-spin-button {
 	flex-grow: 1;
 }
 .controls-settings-label {
-	margin-bottom: 4px;
+	margin-bottom: 2px;
 	text-transform: uppercase;
 	line-height: 1.2em;
 	letter-spacing: .1em;
-	text-align: center;
 	font-weight: bold;
 	font-size: 10px;
-	border-bottom: 1px solid black;
 }
 .controls-settings-section-btns {
 	display: flex;
@@ -603,7 +698,7 @@ input[type=number]::-webkit-outer-spin-button {
 		overflow-y: scroll;
 		display: block;
 	}
-	.stage {
+	.stage-border {
 		min-height: 300px;
 	}
 	.controls {
@@ -612,11 +707,15 @@ input[type=number]::-webkit-outer-spin-button {
 		max-height: unset;
 	}
 	.controls-sequencer {
-		overflow-y: visible;
 		flex-shrink: 0;
 	}
+	.controls-sequencer-content {
+		overflow: scroll;
+		min-width: 400px;
+	}
 	.controls-sequencer-title {
-		position: static;
+		position: sticky;
+		left: 0;
 	}
 	.controls-labels {
 		position: static;
