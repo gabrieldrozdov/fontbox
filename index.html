@@ -11,72 +11,75 @@
 </head>
 <body>
 	<div class="container" data-intro="1" data-controls="1">
-		<div class="message" onclick="showControls()">Click anywhere to show the controls!</div>
 		<main class="stage">
 			<div class="stage-border">
 				<h1 class="title">Fontbox</h1>
 				<div class="content"></div>
 			</div>
 		</main>
-		<nav class="controls">
-			<div class="controls-text">
-				<h2 class="controls-text-title">Input</h2>
-				<input type="text" class="controls-text-input" spellcheck="false" placeholder="Type here!">
-			</div>
 
-			<div class="controls-sequencer">
-				<h2 class="controls-sequencer-title">Sequencer</h2>
+		<nav class="controls">
+			<section class="controls-section" id="input">
+				<h2 class="controls-section-title">Input</h2>
+				<input type="text" id="input-text" spellcheck="false" placeholder="Type here!" oninput="initalize();">
+			</section>
+
+			<section class="controls-section" id="sequencer">
+				<h2 class="controls-section-title">Sequencer</h2>
+
 				<div class="controls-sequencer-content">
-					<div class="controls-labels">
-						<div class="controls-labels-letter">Letter</div>
-						<div class="controls-labels-btn"><span>Rando</span></div>
-						<div class="controls-labels-divider"></div>
-						<div class="controls-labels-btn"><span>Font</span></div>
-						<div class="controls-labels-divider"></div>
-						<div class="controls-labels-btn"><span>Motion</span></div>
-						<div class="controls-labels-btn"><span>Pulse</span></div>
-						<div class="controls-labels-divider"></div>
-						<div class="controls-labels-btn"><span>Sound</span></div>
-						<div class="controls-labels-divider"></div>
-						<div class="controls-labels-btn"><span>Note</span></div>
-						<div class="controls-labels-btn"><span>Octave</span></div>
-						<div class="controls-labels-divider"></div>
-						<div class="controls-labels-tempo">Time (ms)</div>
+					<div class="controls-sequencer-labels">
+						<div class="controls-sequencer-labels-letter">Letter</div>
+						<div class="controls-sequencer-labels-toggle"><span>Rando</span></div>
+						<div class="controls-sequencer-labels-divider"></div>
+						<div class="controls-sequencer-labels-toggle"><span>Font</span></div>
+						<div class="controls-sequencer-labels-divider"></div>
+						<div class="controls-sequencer-labels-toggle"><span>Motion</span></div>
+						<div class="controls-sequencer-labels-toggle"><span>Pulse</span></div>
+						<div class="controls-sequencer-labels-divider"></div>
+						<div class="controls-sequencer-labels-toggle"><span>Sound</span></div>
+						<div class="controls-sequencer-labels-divider"></div>
+						<div class="controls-sequencer-labels-toggle"><span>Note</span></div>
+						<div class="controls-sequencer-labels-toggle"><span>Octave</span></div>
+						<div class="controls-sequencer-labels-divider"></div>
+						<div class="controls-sequencer-labels-time">Time (ms)</div>
 					</div>
-					<div class="controls-letter controls-setall">
-						<div class="controls-letter-label">Set All</div>
-						<div class="controls-letter-spacer"></div>
-						<div class="controls-letter-rando" onclick="goRando()">
+
+					<div class="controls-sequencer-letter" id="setall" data-index="0">
+						<div class="controls-sequencer-letter-label">Set All</div>
+						<div class="controls-sequencer-letter-spacer"></div>
+						<div class="controls-sequencer-letter-toggle controls-sequencer-letter-rando" data-input="rando" onclick="goRando()" onmouseenter="highlightSetting('rando')" onmouseleave="unhighlightSetting('rando')">
 							<svg viewBox="0 0 100 100"><path d="M75,70h-10c-8.258,0-13.227-7.839-19.401-20,6.174-12.162,11.143-20,19.401-20h10v15l25-20-25-20v15h-10c-12.18,0-19.345,9.002-25,19.146-5.655-10.144-12.82-19.146-25-19.146H0v10h15c8.258,0,13.228,7.838,19.401,20-6.174,12.161-11.143,20-19.401,20H0v10h15c12.18,0,19.345-9.002,25-19.146,5.655,10.144,12.82,19.146,25,19.146h10v15l25-20-25-20v15Z"/></svg>
 						</div>
-						<div class="controls-letter-divider"></div>
-						<div class="controls-letter-btn" data-input="font">A</div>
-						<div class="controls-letter-divider"></div>
-						<div class="controls-letter-btn" data-input="motion">1</div>
-						<div class="controls-letter-btn" data-input="pulse">1</div>
-						<div class="controls-letter-divider"></div>
-						<div class="controls-letter-btn" data-input="sound">1</div>
-						<div class="controls-letter-divider"></div>
-						<div class="controls-letter-btn" data-input="note">C</div>
-						<div class="controls-letter-btn" data-input="octave">3</div>
-						<div class="controls-letter-divider"></div>
-						<input type="number" min="10" max="1000" value="250" data-input="time" class="controls-letter-number"/>
+						<div class="controls-sequencer-letter-divider"></div>
+						<div class="controls-sequencer-letter-toggle" data-input="font" onclick="toggleSetting(0, 'font')" onmouseenter="highlightSetting('font')" onmouseleave="unhighlightSetting('font')">A</div>
+						<div class="controls-sequencer-letter-divider"></div>
+						<div class="controls-sequencer-letter-toggle" data-input="motion" onclick="toggleSetting(0, 'motion')" onmouseenter="highlightSetting('motion')" onmouseleave="unhighlightSetting('motion')">1</div>
+						<div class="controls-sequencer-letter-toggle" data-input="pulse" onclick="toggleSetting(0, 'pulse')" onmouseenter="highlightSetting('pulse')" onmouseleave="unhighlightSetting('pulse')">1</div>
+						<div class="controls-sequencer-letter-divider"></div>
+						<div class="controls-sequencer-letter-toggle" data-input="sound" onclick="toggleSetting(0, 'sound')" onmouseenter="highlightSetting('sound')" onmouseleave="unhighlightSetting('sound')">1</div>
+						<div class="controls-sequencer-letter-divider"></div>
+						<div class="controls-sequencer-letter-toggle" data-input="note" onclick="toggleSetting(0, 'note')" onmouseenter="highlightSetting('note')" onmouseleave="unhighlightSetting('note')">C</div>
+						<div class="controls-sequencer-letter-toggle" data-input="octave" onclick="toggleSetting(0, 'octave')" onmouseenter="highlightSetting('octave')" onmouseleave="unhighlightSetting('octave')">3</div>
+						<div class="controls-sequencer-letter-divider"></div>
+						<input type="number" min="50" max="1000" value="250" data-input="time" class="controls-sequencer-letter-time" oninput="assignTime(0)" onmouseenter="highlightSetting('time')" onmouseleave="unhighlightSetting('time')"/>
 					</div>
-					<div class="controls-letters">
-					</div>
-				</div>
-			</div>
 
-			<div class="controls-playback">
-				<h2 class="controls-playback-title">Transport</h2>
-				<div class="controls-playback-btns">
-					<div class="controls-transport">
-						<h3 class="controls-playback-label">Sequencer Direction</h3>
+					<div class="controls-sequencer-letters"></div>
+				</div>
+			</section>
+
+			<section class="controls-section" id="transport">
+				<h2 class="controls-section-title">Transport</h2>
+
+				<div class="controls-transport-content">
+					<div class="controls-transport-section" id="transport-direction">
+						<h3 class="controls-transport-label">Sequencer Direction</h3>
 						<div class="controls-transport-toggles">
-							<div class="controls-transport-toggle" onclick="changeDirection('backward')" data-transport="backward">
+							<div class="controls-transport-toggle"  data-transport="backward" onclick="changeDirection('backward')" data-active="0">
 								<svg viewBox="0 0 200 100"><polygon points="100 0 100 100 0 50 100 0"/><polygon points="200 0 200 100 100 50 200 0"/></svg>
 							</div>
-							<div class="controls-transport-toggle" data-transport="random" onclick="changeDirection('random')">
+							<div class="controls-transport-toggle" data-transport="random" onclick="changeDirection('random')" data-active="0">
 								<svg viewBox="0 0 200 100"><polygon points="90 0 90 100 0 50 90 0"/><polygon points="110 0 110 100 200 50 110 0"/></svg>
 							</div>
 							<div class="controls-transport-toggle" data-transport="forward" onclick="changeDirection('forward')" data-active="1">
@@ -84,53 +87,78 @@
 							</div>
 						</div>
 					</div>
-					<div class="controls-playback-divider"></div>
-					<div class="controls-playback-toggles">
-						<h3 class="controls-playback-label">Toggle Playback</h3>
-						<div class="controls-playback-toggle" onclick="togglePlayback()" data-state="0">
-							<svg viewBox="0 0 100 100" class="controls-playback-toggle-play"><polygon points="0 0 0 100 100 50 0 0"/></svg>
-							<svg viewBox="0 0 100 100" class="controls-playback-toggle-pause"><rect width="33.333" height="100"/><rect x="66.667" width="33.333" height="100"/></svg>
+
+					<div class="controls-transport-divider"></div>
+					
+					<div class="controls-transport-section">
+						<h3 class="controls-transport-label">Toggle Playback</h3>
+						<div class="controls-transport-toggles">
+							<div class="controls-transport-toggle" id="toggle-playback" onclick="togglePlayback()" data-state="0">
+								<svg viewBox="0 0 100 100" id="play"><polygon points="0 0 0 100 100 50 0 0"/></svg>
+								<svg viewBox="0 0 100 100" id="pause"><rect width="33.333" height="100"/><rect x="66.667" width="33.333" height="100"/></svg>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			</section>
 
-			<div class="controls-settings">
-				<h2 class="controls-settings-title">Settings</h2>
+			<section class="controls-section" id="settings">
+				<h2 class="controls-section-title">Settings</h2>
+
 				<div class="controls-settings-content">
 					<div class="controls-settings-section">
-						<h3 class="controls-settings-label">Spacing</h3>
+						<h3 class="controls-settings-label">Motion</h3>
 						<div class="controls-settings-section-btns">
-							<div class="controls-settings-btn" onclick="changeSpacing(-.02)">
-								<svg viewBox="0 0 100 100"><rect x="33.333" width="33.333" height="100" transform="translate(100) rotate(90)"/></svg>
-							</div>
-							<div class="controls-settings-btn" onclick="changeSpacing(.02)">
-								<svg viewBox="0 0 100 100"><polygon points="100 33.333 66.667 33.333 66.667 0 33.333 0 33.333 33.333 0 33.333 0 66.667 33.333 66.667 33.333 100 66.667 100 66.667 66.667 100 66.667 100 33.333"/></svg>
-							</div>
-						</div>
-					</div>
-					<div class="controls-settings-divider"></div>
-					<div class="controls-settings-section">
-						<h3 class="controls-settings-label">Volume</h3>
-						<div class="controls-settings-section-btns">
-							<div class="controls-settings-btn">
-								<svg viewBox="0 0 100 100"><rect x="33.333" width="33.333" height="100" transform="translate(100) rotate(90)"/></svg>
-							</div>
-							<div class="controls-settings-btn">
-								<svg viewBox="0 0 100 100"><polygon points="100 33.333 66.667 33.333 66.667 0 33.333 0 33.333 33.333 0 33.333 0 66.667 33.333 66.667 33.333 100 66.667 100 66.667 66.667 100 66.667 100 33.333"/></svg>
-							</div>
-						</div>
-					</div>
-					<div class="controls-settings-divider"></div>
-					<div class="controls-settings-section">
-						<h3 class="controls-settings-label">Animations</h3>
-						<div class="controls-settings-section-btns">
-							<div class="controls-settings-btn controls-settings-animations" onclick="toggleAnimations();">
+							<div class="controls-settings-btn" id="toggle-animations" onclick="toggleAnimations();">
 								<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
 							</div>
 						</div>
 					</div>
+
 					<div class="controls-settings-divider"></div>
+
+					<div class="controls-settings-section">
+						<h3 class="controls-settings-label">Font Size</h3>
+						<div class="controls-settings-section-btns">
+							<div class="controls-settings-btn" onclick="changeFontSize(-1)" id="toggle-fontsize-down">
+								<svg viewBox="0 0 100 100"><rect x="33.333" width="33.333" height="100" transform="translate(100) rotate(90)"/></svg>
+							</div>
+							<div class="controls-settings-btn" onclick="changeFontSize(1)" id="toggle-fontsize-up">
+								<svg viewBox="0 0 100 100"><polygon points="100 33.333 66.667 33.333 66.667 0 33.333 0 33.333 33.333 0 33.333 0 66.667 33.333 66.667 33.333 100 66.667 100 66.667 66.667 100 66.667 100 33.333"/></svg>
+							</div>
+						</div>
+					</div>
+
+					<div class="controls-settings-divider"></div>
+
+					<div class="controls-settings-section">
+						<h3 class="controls-settings-label">Tracking</h3>
+						<div class="controls-settings-section-btns">
+							<div class="controls-settings-btn" onclick="changeTracking(-.05)" id="toggle-tracking-down">
+								<svg viewBox="0 0 100 100"><rect x="33.333" width="33.333" height="100" transform="translate(100) rotate(90)"/></svg>
+							</div>
+							<div class="controls-settings-btn" onclick="changeTracking(.05)" id="toggle-tracking-up">
+								<svg viewBox="0 0 100 100"><polygon points="100 33.333 66.667 33.333 66.667 0 33.333 0 33.333 33.333 0 33.333 0 66.667 33.333 66.667 33.333 100 66.667 100 66.667 66.667 100 66.667 100 33.333"/></svg>
+							</div>
+						</div>
+					</div>
+
+					<div class="controls-settings-divider"></div>
+
+					<div class="controls-settings-section">
+						<h3 class="controls-settings-label">Leading</h3>
+						<div class="controls-settings-section-btns">
+							<div class="controls-settings-btn" onclick="changeLeading(-.1)" id="toggle-leading-down">
+								<svg viewBox="0 0 100 100"><rect x="33.333" width="33.333" height="100" transform="translate(100) rotate(90)"/></svg>
+							</div>
+							<div class="controls-settings-btn" onclick="changeLeading(.1)" id="toggle-leading-up">
+								<svg viewBox="0 0 100 100"><polygon points="100 33.333 66.667 33.333 66.667 0 33.333 0 33.333 33.333 0 33.333 0 66.667 33.333 66.667 33.333 100 66.667 100 66.667 66.667 100 66.667 100 33.333"/></svg>
+							</div>
+						</div>
+					</div>
+
+					<div class="controls-settings-divider"></div>
+
 					<div class="controls-settings-section">
 						<h3 class="controls-settings-label">Hide Menu</h3>
 						<div class="controls-settings-section-btns">
@@ -140,8 +168,10 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</section>
 		</nav>
+
+		<div class="message" onclick="showControls()">Click anywhere to show the controls!</div>
 	</div>
 	<div class="background"></div>
 
