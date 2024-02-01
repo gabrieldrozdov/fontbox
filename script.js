@@ -177,9 +177,6 @@ function playVoice(letter, pitch) {
 	}
 }
 
-const notes = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
-const octaves = [1,2,3,4,5];
-
 // ——————————————————————————————————————————
 // SETTINGS/CONTROLS
 // ——————————————————————————————————————————
@@ -281,7 +278,7 @@ function assignSetting(index, name, value) {
 
 // Set a letter’s time value
 function assignTime(index) {
-	const letter = document.querySelector(`[data-index="${index}"]`);
+	const letter = document.querySelector(`.controls-sequencer-letter[data-index="${index}"]`);
 	const setting = letter.querySelector(`[data-input="time"]`);
 	let value = parseInt(setting.value);
 
