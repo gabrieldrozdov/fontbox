@@ -6,6 +6,15 @@
 	<title>Fontbox</title>
 	<link rel="stylesheet" href="style.css">
 
+	<meta name="author" content="Gabriel Drozdov">
+	<meta name="keywords" content="HTML, CSS, JavaScript, Music, Creative Coding, Typography">
+	<meta name="description" content="Fontbox is toy with fonts. Sounds too. Play! (Please!)">
+	<meta property="og:url" content="https://fontbox.barcoloudly.com/">
+	<meta name="og:title" property="og:title" content="Fontbox">
+	<meta property="og:description" content="Fontbox is toy with fonts. Sounds too. Play! (Please!)">
+	<meta property="og:image" content="./assets/meta/opengraph.jpg">
+	<link rel="icon" type="image/png" href="assets/meta/favicon.png" />
+
 	<!-- Tone.js for audio -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
 </head>
@@ -156,14 +165,64 @@
 							</div>
 						</div>
 					</div>
+				</div>
+			</section>
 
-					<div class="controls-settings-divider"></div>
+			<section class="controls-section" id="presets">
+				<h2 class="controls-section-title">Presets</h2>
 
-					<div class="controls-settings-section">
-						<h3 class="controls-settings-label">Hide Menu</h3>
-						<div class="controls-settings-section-btns">
-							<div class="controls-settings-btn" onclick="hideControls()">
-								<svg viewBox="0 0 100 100"><polygon points="100 23.57 76.43 0 50 26.43 23.57 0 0 23.57 26.43 50 0 76.43 23.57 100 50 73.57 76.43 100 100 76.43 73.57 50 100 23.57"/></svg>
+				<div class="controls-presets-content">
+					<div class="controls-presets-section">
+						<h3 class="controls-presets-label">Prev Preset</h3>
+						<div class="controls-presets-section-btns">
+							<div class="controls-presets-btn" onclick="prevPreset()">
+								<svg viewBox="0 0 100 100"><polygon points="100 0 100 100 0 49.285 100 0"/></svg>
+							</div>
+						</div>
+					</div>
+
+					<div class="controls-presets-divider"></div>
+
+					<div class="controls-presets-display">
+						<h3 class="controls-presets-label">Apply Preset</h3>
+						<div class="controls-presets-section-btns">
+							<div class="controls-presets-btn" id="preset-name" onclick="applyPreset()">
+								Choir
+							</div>
+						</div>
+					</div>
+
+					<div class="controls-presets-divider"></div>
+
+					<div class="controls-presets-section">
+						<h3 class="controls-presets-label">Next Preset</h3>
+						<div class="controls-presets-section-btns">
+							<div class="controls-presets-btn" onclick="nextPreset()">
+								<svg viewBox="0 0 100 100"><polygon points="0 0 0 100 100 49.285 0 0"/></svg>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="controls-section" id="fontbox">
+				<h2 class="controls-section-title">Fontbox</h2>
+
+				<div class="controls-fontbox-content">
+					<div class="controls-fontbox-section">
+						<div class="controls-fontbox-section-btns">
+							<div class="controls-fontbox-btn" onclick="showCredits()">
+								Info + Credits
+							</div>
+						</div>
+					</div>
+
+					<div class="controls-fontbox-divider"></div>
+
+					<div class="controls-fontbox-section">
+						<div class="controls-fontbox-section-btns">
+							<div class="controls-fontbox-btn" onclick="hideControls()">
+								Go Fullscreen
 							</div>
 						</div>
 					</div>
@@ -173,7 +232,53 @@
 
 		<div class="message" onclick="showControls()">Click anywhere to show the controls!</div>
 	</div>
+
 	<div class="background"></div>
+
+	<footer class="credits" id="credits">
+		<section>
+			<h2 style="background-color: var(--blue)">What?</h2>
+			<p>Fontbox is <span class="credits-callout">toy</span></p>
+			<p>Toy makes <span class="credits-callout">images</span> and <span class="credits-callout">sounds</span></p>
+			<p><span class="credits-callout">Play</span> with toy! (Please!)</p>
+		</section>
+
+		<div class="credits-divider" style="transform: rotate(-2deg);"></div>
+
+		<section>
+			<h2 style="background-color: var(--yellow)">How?</h2>
+			<p>Type in <span class="credits-callout">text</span></p>
+			<p>See text in <span class="credits-callout">sequencer</span></p>
+			<p>Change sequencer <span class="credits-callout">settings</span></p>
+		</section>
+
+		<div class="credits-divider" style="transform: rotate(2deg);"></div>
+
+		<section>
+			<h2 style="background-color: var(--red)">Oh?</h2>
+			<p>It is <span class="credits-callout">simple</span></p>
+			<p>It is <span class="credits-callout">fun</span></p>
+		</section>
+
+		<div class="credits-divider" style="transform: rotate(2deg);"></div>
+
+		<section>
+			<h2 style="background-color: var(--purple)">Save?</h2>
+			<p>You must <span class="credits-callout">screen&nbsp;record</span></p>
+			<p>That is only way <span class="credits-callout">sorry</span></p>
+		</section>
+
+		<div class="credits-divider" style="transform: rotate(-2deg);"></div>
+
+		<section>
+			<h2 style="background-color: var(--green)">Who?</h2>
+			<p><span class="credits-callout">Design + Code</span><br><a href="https://www.gabrieldrozdov.com/" target="_blank">Gabriel Drozdov</a></p>
+			<p><span class="credits-callout">UI Typeface</span><br><a href="https://www.collletttivo.it/typefaces/apfel-grotezk" target="_blank">Apfel Grotezk by Luigi Gorlero</a></p>
+			<p><span class="credits-callout">Other Fonts</span><br>Web-safe fonts only</p>
+		</section>
+
+		<button onclick="hideCredits();" class="credits-close">Go back now</button>
+	</footer>
 
 	<script src="script.js"></script>
 </body>

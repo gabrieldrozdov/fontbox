@@ -466,8 +466,6 @@ function changeLeading(change) {
 	document.documentElement.style.setProperty('--leading', leading + "em");
 }
 
-// TODO: volume
-
 // Toggle animations
 let animations = true;
 function toggleAnimations() {
@@ -479,6 +477,129 @@ function toggleAnimations() {
 		animationsToggle.dataset.state = 1;
 		animations = true;
 	}
+}
+
+// Presets
+let presetIndex = 0;
+const presets = {
+	"choir": {
+		"font": ['Arial', "Times New Roman"],
+		"motion": ['translate', 'rotate'],
+		"pulse": ['circle', 'square', 'diamond'],
+		"sound": ['voice'],
+		"note": ['C', 'D', 'E'],
+		"octave": ['3'],
+		"time": [200, 250, 300]
+	},
+	"drummer": {
+		"font": ['Futura', 'Copperplate'],
+		"motion": ['translate', 'rotate', 'scaley'],
+		"pulse": ['?'],
+		"sound": ['kick', 'snare', 'tom', 'hihat'],
+		"note": ['C', 'D', 'E', 'F', 'G', 'A', 'B'],
+		"octave": ['3'],
+		"time": [100, 200, 400]
+	},
+	"blast": {
+		"font": ['Futura'],
+		"motion": ['scalex'],
+		"pulse": ['square'],
+		"sound": ['kick', 'tom'],
+		"note": ['C', 'E', 'G'],
+		"octave": ['1', '2'],
+		"time": [50, 100, 150]
+	},
+	"big bummer": {
+		"font": ['Chalkduster'],
+		"motion": ['scalex', 'scaley'],
+		"pulse": ['circle'],
+		"sound": ['horn'],
+		"note": ['B', 'Bb', 'A'],
+		"octave": ['2', '1'],
+		"time": [300, 600, 900]
+	},
+	"skeleton man": {
+		"font": ['Comic Sans MS', 'Papyrus'],
+		"motion": ['scalex', 'scaley'],
+		"pulse": ['circle', 'square'],
+		"sound": ['woodblock'],
+		"note": ['D', 'F', 'Ab', 'C'],
+		"octave": ['1', '2', '3', '4', '5'],
+		"time": [100]
+	},
+	"bass boys only": {
+		"font": ['Impact'],
+		"motion": ['scale'],
+		"pulse": ['diamond'],
+		"sound": ['voice'],
+		"note": ['C'],
+		"octave": ['1'],
+		"time": [500, 1000]
+	},
+	"superstar": {
+		"font": ['Party LET', 'Silom'],
+		"motion": ['party'],
+		"pulse": ['burst'],
+		"sound": ['synth'],
+		"note": ['D', 'E', 'F#', 'Ab', 'A'],
+		"octave": ['3', '4', '5'],
+		"time": [200, 400]
+	},
+	"drummer boy": {
+		"font": ['Courier'],
+		"motion": ['translate'],
+		"pulse": ['cross'],
+		"sound": ['snare'],
+		"note": ['C', 'G'],
+		"octave": ['3', '4'],
+		"time": [50, 100, 200, 400]
+	},
+	"virtuoso": {
+		"font": ['Times New Roman', 'Didot', 'Baskerville'],
+		"motion": ['party', 'scale'],
+		"pulse": ['burst'],
+		"sound": ['piano', 'guitar'],
+		"note": ['F', 'G', 'A', 'Bb', 'C', 'D'],
+		"octave": ['1', '2', '3', '4', '5'],
+		"time": [100]
+	},
+}
+const presetNames = Object.keys(presets);
+function prevPreset() {
+	presetIndex--;
+	if (presetIndex < 0) {
+		presetIndex = presetNames.length-1;
+	}
+	applyPreset();
+}
+function applyPreset() {
+	const presetName = document.querySelector('#preset-name');
+	presetName.innerText = presetNames[presetIndex];
+
+	const currentPreset = presets[presetNames[presetIndex]];
+	for (let setting of Object.keys(currentPreset)) {
+		const settingOptions = currentPreset[setting];
+		for (let i=0; i<activeSettings.length; i++) {
+			assignSetting(i, setting, settingOptions[Math.floor(Math.random()*settingOptions.length)]);
+		}
+	}
+}
+function nextPreset() {
+	presetIndex++;
+	if (presetIndex >= presetNames.length) {
+		presetIndex = 0;
+	}
+	applyPreset();
+}
+
+// Credits
+function showCredits() {
+	const credits = document.querySelector("#credits");
+	credits.dataset.active = 1;
+}
+function hideCredits() {
+	const credits = document.querySelector("#credits");
+	credits.dataset.active = 0;
 }
 
 // Hide/show controls panel
@@ -724,7 +845,7 @@ function triggerLetter(index) {
 	} else if (motion == "scaley") {
 		letter.style.transform = `scaleY(${Math.random()*3+.1})`;
 	} else if (motion == "scale") {
-		letter.style.transform = `scale(${Math.random()*3+.1})`;
+		letter.style.transform = `scale(${Math.random()*2+.1})`;
 	} else {
 		letter.style.transform = `unset`;
 	}
@@ -791,7 +912,7 @@ for (let letter of title.innerText) {
 	titleTemp += `<span>${letter}</span>`;
 }
 title.innerHTML = titleTemp;
-let titleColors = ['var(--blue)', 'var(--red)', "var(--yellow)", "var(--green)", "var(--purple)"];
+let titleColors = ['var(--blue)', 'var(--red)', "var(--yellow)", "var(--green)", "var(--purple)", "var(--orange)"];
 let titleColorIndex = 0;
 let titleLetterIndex = 0;
 setInterval(() => {
@@ -801,11 +922,7 @@ setInterval(() => {
 		titleLetterIndex = 0;
 	}
 	titleLetter.style.transform = `translateY(${Math.round(Math.random()*50-25)}%) rotate(${Math.floor(Math.random()*30-15)}deg) scale(${Math.random()*1.1+.5})`;
-	titleLetter.style.color = titleColors[titleColorIndex];
+	titleLetter.style.color = titleColors[Math.floor(Math.random()*titleColors.length)];
 	const fontOptions = Object.keys(settings['font'])
 	titleLetter.style.fontFamily = fontOptions[Math.floor(Math.random()*fontOptions.length)];
-	titleColorIndex++;
-	if (titleColorIndex == titleColors.length) {
-		titleColorIndex = 0;
-	}
 }, 200)
