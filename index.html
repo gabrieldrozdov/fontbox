@@ -111,6 +111,43 @@
 				</div>
 			</section>
 
+			<section class="controls-section" id="presets">
+				<h2 class="controls-section-title">Presets</h2>
+
+				<div class="controls-presets-content">
+					<div class="controls-presets-section">
+						<h3 class="controls-presets-label">Prev Preset</h3>
+						<div class="controls-presets-section-btns">
+							<div class="controls-presets-btn" onclick="prevPreset()">
+								<svg viewBox="0 0 100 100"><polygon points="100 0 100 100 0 49.285 100 0"/></svg>
+							</div>
+						</div>
+					</div>
+
+					<div class="controls-presets-divider"></div>
+
+					<div class="controls-presets-display">
+						<h3 class="controls-presets-label">Apply Preset</h3>
+						<div class="controls-presets-section-btns">
+							<div class="controls-presets-btn" id="preset-name" onclick="applyPreset()">
+								Choir
+							</div>
+						</div>
+					</div>
+
+					<div class="controls-presets-divider"></div>
+
+					<div class="controls-presets-section">
+						<h3 class="controls-presets-label">Next Preset</h3>
+						<div class="controls-presets-section-btns">
+							<div class="controls-presets-btn" onclick="nextPreset()">
+								<svg viewBox="0 0 100 100"><polygon points="0 0 0 100 100 49.285 0 0"/></svg>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
 			<section class="controls-section" id="settings">
 				<h2 class="controls-section-title">Settings</h2>
 
@@ -168,43 +205,6 @@
 				</div>
 			</section>
 
-			<section class="controls-section" id="presets">
-				<h2 class="controls-section-title">Presets</h2>
-
-				<div class="controls-presets-content">
-					<div class="controls-presets-section">
-						<h3 class="controls-presets-label">Prev Preset</h3>
-						<div class="controls-presets-section-btns">
-							<div class="controls-presets-btn" onclick="prevPreset()">
-								<svg viewBox="0 0 100 100"><polygon points="100 0 100 100 0 49.285 100 0"/></svg>
-							</div>
-						</div>
-					</div>
-
-					<div class="controls-presets-divider"></div>
-
-					<div class="controls-presets-display">
-						<h3 class="controls-presets-label">Apply Preset</h3>
-						<div class="controls-presets-section-btns">
-							<div class="controls-presets-btn" id="preset-name" onclick="applyPreset()">
-								Choir
-							</div>
-						</div>
-					</div>
-
-					<div class="controls-presets-divider"></div>
-
-					<div class="controls-presets-section">
-						<h3 class="controls-presets-label">Next Preset</h3>
-						<div class="controls-presets-section-btns">
-							<div class="controls-presets-btn" onclick="nextPreset()">
-								<svg viewBox="0 0 100 100"><polygon points="0 0 0 100 100 49.285 0 0"/></svg>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-
 			<section class="controls-section" id="fontbox">
 				<h2 class="controls-section-title">Fontbox</h2>
 
@@ -214,6 +214,16 @@
 							<div class="controls-fontbox-btn" onclick="showCredits()">
 								Info + Credits
 							</div>
+						</div>
+					</div>
+
+					<div class="controls-fontbox-divider"></div>
+
+					<div class="controls-fontbox-section">
+						<div class="controls-fontbox-section-btns">
+							<a class="controls-fontbox-btn" href="https://barcoloudly.com" target="_blank">
+								More Projects
+							</a>
 						</div>
 					</div>
 
