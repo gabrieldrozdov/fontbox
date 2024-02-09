@@ -813,7 +813,7 @@ input[type=number]::-webkit-outer-spin-button {
 	top: 0;
 	left: 0;
 	width: 100vw;
-	height: 100vh;
+	height: 100dvh;
 	background-color: white;
 	padding: 80px;
 	font-family: "Apfel", sans-serif;
@@ -882,6 +882,7 @@ input[type=number]::-webkit-outer-spin-button {
 	position: sticky;
 	bottom: 0;
 	z-index: 9;
+	color: black;
 	background-color: var(--orange);
 	font-weight: bold;
 	align-self: end;
