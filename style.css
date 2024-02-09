@@ -67,7 +67,7 @@ body {
 	top: 0;
 	left: 0;
 	width: 100vw;
-	height: 100vh;
+	height: 100dvh;
 	z-index: -1;
 	background-color: #aaa;
 	mix-blend-mode: multiply;
@@ -127,7 +127,7 @@ input[type=number]::-webkit-outer-spin-button {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	max-height: 100vh;
+	max-height: 100dvh;
 	background-color: white;
 	border: 2px solid black;
 	box-shadow: 5px 5px 0 black;
@@ -236,7 +236,7 @@ input[type=number]::-webkit-outer-spin-button {
 	gap: 20px;
 	padding: 20px;
 	padding-left: 0;
-	max-height: 100vh;
+	max-height: 100dvh;
 	overflow-y: scroll;
 }
 .container[data-controls="0"] .controls {
